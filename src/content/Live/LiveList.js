@@ -99,7 +99,7 @@ function LiveTallyList({list}){
 
                     <Box>
 
-                        <Box component="div" ref={sliderRef} className="keen-slider">
+                        <Box component="div" sx={{m:1}} ref={sliderRef} className="keen-slider">
 
                             <Box className="keen-slider__slide number-slide1">
                                 <LiveCaptain list={filterCaptain} title="Barangay Captain" />
