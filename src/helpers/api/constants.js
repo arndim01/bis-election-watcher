@@ -5,7 +5,6 @@ export const ValidateProps = {
         part_id: { type: 'string' },
         prec_id: { type: 'string' },
         cand_id: { type: 'string' },
-        created_by: { type: 'string' },
         type: { type: 'string' },
     },
     profile: {

@@ -25,6 +25,11 @@ export function useTallyVote({ formData }){
     return {data, error};
 }
 
+export async function ApiGetTally({ token, precinct }){
+    const { data, error } = await fetchWrapper.get(token, `${publicRuntimeConfig.apiUrl}/precinct/query/generatetally/${precinct}`);
+    return {data, error};
+}
+
 export async function ApiPostCount({ token, formData }){
     const { data, error } = await fetchWrapper.post(token, `${publicRuntimeConfig.apiUrl}/count/candidate`, formData);
     return {data, error};

@@ -8,7 +8,7 @@ import {
     MenuItem
 } from '@mui/material';
 import Layout from '@/layouts/Layout';
-import { useTally } from '@/helpers/hooks/tally';
+import { ApiGetTally, useTally } from '@/helpers/hooks/tally';
 import TallyList from '@/content/Tally/TallyList';
 import { useSession } from 'next-auth/react';
 import { ApiGetPrecinctByParty } from '@/helpers/hooks/precinct';
@@ -32,11 +32,13 @@ function TallyPage(){
     const { data: session} = useSession();
     const [precinct, setPrecinct] = useState('1');
     const [precinctList, setPrencinctList] = useState([]);
-    const { data, error } = useTally({ precinct: precinct});
+    const [ data, setData ] = useState('');
+   
     
     
     useEffect(() => {
         getPrecinctList();
+        getPrecinctCandidate();
     }, [session]);
     
     const getPrecinctList = async () => {
@@ -46,8 +48,14 @@ function TallyPage(){
         }
 
     }
-    
-    if( error ) return (<h1>Loading failed...</h1>);
+
+    const getPrecinctCandidate = async () => {
+        if( session ) {
+            const { data, error } = await ApiGetTally({ token: 'token', precinct});
+            if( data) setData(data);
+        }
+    }
+
     if( !data ) return (<h1>Loading...</h1>);
 
     return (
@@ -77,6 +85,7 @@ function TallyPage(){
                                 value={precinct}
                                 onChange={(event) => {
                                     setPrecinct(event.target.value);
+                                    getPrecinctCandidate();
                                 }}
                                 sx={{
                                     width: 150
