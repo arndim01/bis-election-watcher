@@ -41,7 +41,6 @@ function AccountPage(){
                 setMessage('');
             if( data.error){
                 setError('apiError', { message: 'Failed to change password'}); 
-                console.log('error');
             }else{
                 setMessage('Password changed.')
             }
