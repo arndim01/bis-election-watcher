@@ -33,7 +33,6 @@ function HomePage() {
   React.useEffect(() => {
 
     if( session){
-      console.log(session);
     }
   }, [session]);
 

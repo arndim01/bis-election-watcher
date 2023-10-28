@@ -31,11 +31,10 @@ function LivePage(props){
             <Head>
                 <title>Live Tally</title>
             </Head>
-            <Container maxWidth="lg">
+            <Container maxWidth="false">
                 { data && 
                     <LiveTallyList list={data} />
                 }
-                
             </Container>
         </>
     );
@@ -45,10 +44,6 @@ export default LivePage;
 
 export async function getServerSideProps( context ){
     const { barangay, party} = context.query;
-
-    console.log(barangay);
-    
-    console.log(party);
     const data = {barangay, party}
     return { props: {
         data

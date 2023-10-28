@@ -28,9 +28,6 @@ const Layout = ({ children }) => {
 
     const handleSignOut = () => {
         if( session ){
-
-
-            console.log(session);
             signOut();
         }
     };

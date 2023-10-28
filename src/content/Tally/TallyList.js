@@ -49,11 +49,12 @@ const applyFilters = (list, filter) => {
 }
 
 function TallyList({list}){
-    
+
     const filterCaptain = applyFilters(list, "Captain");
-    const filterCounsilor = applyFilters(list, "Counsilor");
+    const filterCounsilor = applyFilters(list, "Councilor");
     const filterSkChairman = applyFilters(list, "SK Chairman");
-    const filterSKCounsilor = applyFilters(list, "SK Counsilor");
+    const filterSKCounsilor = applyFilters(list, "SK Councilor");
+    const filterIndependent = applyFilters(list, "Independent");
 
     async function postVote(values, types){
 
@@ -71,12 +72,7 @@ function TallyList({list}){
 
         let formDataObjects = Object.fromEntries(formData.entries());
         const { data, error} = await ApiPostCount({ token: "token", formData: formDataObjects});
-        if( data ){
-            console.log(error);
-        }
-        if( error){
-            console.log(error);
-        }
+        
     }
 
     const handleClickAdd = async (values) => {
@@ -103,6 +99,7 @@ function TallyList({list}){
                                 width: '100%',
                                 maxWidth: 560,
                                 bgcolor: 'background.paper',
+                                '& .MuiListItemText-primary': { width: '200px' }
                             }}
                             >
 
@@ -132,11 +129,14 @@ function TallyList({list}){
                                         </>
                                         
                                     }>
-                                        <ListItemAvatar>
-                                        <Avatar>
-                                            <ImageIcon />
-                                        </Avatar>
-                                        </ListItemAvatar>
+                                        <ListItemAvatar sx={{
+                                                        mr:2
+                                                    }}>
+                                                    {
+                                                        row.photo_url &&
+                                                        <Avatar sx={{ height: 50, width: 50}} src={row.photo_url}/>
+                                                    }
+                                                    </ListItemAvatar>
                                         <ListItemText primary={row.fullname} secondary="Captain" />
                                     </ListItem>
                                 )
@@ -150,13 +150,14 @@ function TallyList({list}){
                     { filterCounsilor &&
                         <>
                             <Typography variant='h6'>
-                                Counsilor
+                                Councilor
                             </Typography>
                             <List
                             sx={{
                                 width: '100%',
                                 maxWidth: 560,
                                 bgcolor: 'background.paper',
+                                '& .MuiListItemText-primary': { width: '200px' }
                             }}
                             >
                                 {  filterCounsilor.map((row)=> {
@@ -185,14 +186,54 @@ function TallyList({list}){
                                             </>
                                             
                                         }>
-                                            <ListItemAvatar>
-                                            <Avatar>
-                                                <ImageIcon />
-                                            </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText primary={row.fullname} secondary="Counsilor" />
+                                            <ListItemAvatar sx={{
+                                                        mr:2
+                                                    }}>
+                                                    {
+                                                        row.photo_url &&
+                                                        <Avatar sx={{ height: 50, width: 50}} src={row.photo_url}/>
+                                                    }
+                                                    </ListItemAvatar>
+                                            <ListItemText primary={row.fullname} secondary="Councilor" />
                                         </ListItem>
                                     )
+
+                                })}
+
+                                {  filterIndependent.map((row)=> {
+
+                                return(
+                                    <ListItem key={row.cand_id} secondaryAction={
+                                        <>
+                                            <IconButton edge="start" aria-label="delete"
+                                                onClick={() => handleClickMinus(row)}
+                                            >
+                                            <RemoveCircleIcon/>
+                                            </IconButton>
+                                            <Box sx={{ display: 'inline-flex'}}>
+                                            <Typography variant='' sx={{
+                                                fontSize: 15
+                                            }} >
+                                            {row.totalcount}
+                                            </Typography>
+                                            
+                                            </Box>
+                                            <IconButton edge="end" aria-label="add"
+                                                onClick={() => handleClickAdd(row)}
+                                            >
+                                                <AddCircleIcon color='secondary' />
+                                            </IconButton>
+                                        </>
+                                        
+                                    }>
+                                        <ListItemAvatar sx={{
+                                                    mr:2
+                                                }}>
+                                                <Avatar sx={{ height: 50, width: 50}} src={row.photo_url?row.photo_url:'/static/images/watcher/default.png'}/>
+                                                </ListItemAvatar>
+                                        <ListItemText primary={row.fullname} secondary="Councilor" />
+                                    </ListItem>
+                                )
 
                                 })}
                             </List>
@@ -209,6 +250,7 @@ function TallyList({list}){
                                 width: '100%',
                                 maxWidth: 560,
                                 bgcolor: 'background.paper',
+                                '& .MuiListItemText-primary': { width: '200px' }
                             }}
                             >
                                 {  filterSkChairman.map((row)=> {
@@ -237,11 +279,14 @@ function TallyList({list}){
                                             </>
                                             
                                         }>
-                                            <ListItemAvatar>
-                                            <Avatar>
-                                                <ImageIcon />
-                                            </Avatar>
-                                            </ListItemAvatar>
+                                            <ListItemAvatar sx={{
+                                                        mr:2
+                                                    }}>
+                                                    {
+                                                        row.photo_url &&
+                                                        <Avatar sx={{ height: 50, width: 50}} src={row.photo_url}/>
+                                                    }
+                                                    </ListItemAvatar>
                                             <ListItemText primary={row.fullname} secondary="SK Chairman" />
                                         </ListItem>
                                     )
@@ -254,13 +299,14 @@ function TallyList({list}){
                     { filterSKCounsilor &&
                         <>
                             <Typography variant='h6'>
-                                SK Counsilor
+                                SK Councilor
                             </Typography>
                             <List
                             sx={{
                                 width: '100%',
                                 maxWidth: 560,
                                 bgcolor: 'background.paper',
+                                '& .MuiListItemText-primary': { width: '200px' }
                             }}
                             >
                                 {  filterSKCounsilor.map((row)=> {
@@ -289,12 +335,15 @@ function TallyList({list}){
                                             </>
                                             
                                         }>
-                                            <ListItemAvatar>
-                                            <Avatar>
-                                                <ImageIcon />
-                                            </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText primary={row.fullname} secondary="SK Counsilor" />
+                                            <ListItemAvatar sx={{
+                                                        mr:2
+                                                    }}>
+                                                    {
+                                                        row.photo_url &&
+                                                        <Avatar sx={{ height: 50, width: 50}} src={row.photo_url}/>
+                                                    }
+                                                    </ListItemAvatar>
+                                            <ListItemText primary={row.fullname} secondary="SK Councilor" />
                                         </ListItem>
                                     )
 
