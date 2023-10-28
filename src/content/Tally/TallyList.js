@@ -50,6 +50,8 @@ const applyFilters = (list, filter) => {
 
 function TallyList({list}){
 
+    const [loading, setLoading] = useState(false);
+
     const filterCaptain = applyFilters(list, "Captain");
     const filterCounsilor = applyFilters(list, "Councilor");
     const filterSkChairman = applyFilters(list, "SK Chairman");
@@ -57,7 +59,7 @@ function TallyList({list}){
     const filterIndependent = applyFilters(list, "Independent");
 
     async function postVote(values, types){
-
+        setLoading(true);
         if( values.totalcount == 0 && types == "minus"  ) return;
 
         const fields = Object.keys(ValidateProps.candidate_count);
@@ -72,7 +74,7 @@ function TallyList({list}){
 
         let formDataObjects = Object.fromEntries(formData.entries());
         const { data, error} = await ApiPostCount({ token: "token", formData: formDataObjects});
-        
+        setLoading(false);        
     }
 
     const handleClickAdd = async (values) => {
@@ -108,7 +110,7 @@ function TallyList({list}){
                                 return(
                                     <ListItem key={row.cand_id} secondaryAction={
                                         <>
-                                            <IconButton edge="start" aria-label="delete"
+                                            <IconButton edge="start" aria-label="delete" disabled={loading}
                                                 onClick={() => handleClickMinus(row)}
                                             >
                                             <RemoveCircleIcon/>
@@ -121,7 +123,7 @@ function TallyList({list}){
                                             </Typography>
                                             
                                             </Box>
-                                            <IconButton edge="end" aria-label="add"
+                                            <IconButton edge="end" aria-label="add" disabled={loading}
                                                 onClick={() => handleClickAdd(row)}
                                             >
                                                 <AddCircleIcon color='secondary' />
@@ -165,7 +167,7 @@ function TallyList({list}){
                                     return(
                                         <ListItem key={row.cand_id} secondaryAction={
                                             <>
-                                                <IconButton edge="start" aria-label="delete"
+                                                <IconButton edge="start" aria-label="delete" disabled={loading}
                                                     onClick={() => handleClickMinus(row)}
                                                 >
                                                 <RemoveCircleIcon/>
@@ -178,7 +180,7 @@ function TallyList({list}){
                                                 </Typography>
                                                 
                                                 </Box>
-                                                <IconButton edge="end" aria-label="add"
+                                                <IconButton edge="end" aria-label="add" disabled={loading}
                                                     onClick={() => handleClickAdd(row)}
                                                 >
                                                     <AddCircleIcon color='secondary' />
@@ -205,7 +207,7 @@ function TallyList({list}){
                                 return(
                                     <ListItem key={row.cand_id} secondaryAction={
                                         <>
-                                            <IconButton edge="start" aria-label="delete"
+                                            <IconButton edge="start" aria-label="delete" disabled={loading}
                                                 onClick={() => handleClickMinus(row)}
                                             >
                                             <RemoveCircleIcon/>
@@ -218,7 +220,7 @@ function TallyList({list}){
                                             </Typography>
                                             
                                             </Box>
-                                            <IconButton edge="end" aria-label="add"
+                                            <IconButton edge="end" aria-label="add" disabled={loading}
                                                 onClick={() => handleClickAdd(row)}
                                             >
                                                 <AddCircleIcon color='secondary' />
@@ -258,7 +260,7 @@ function TallyList({list}){
                                     return(
                                         <ListItem key={row.cand_id} secondaryAction={
                                             <>
-                                                <IconButton edge="start" aria-label="delete"
+                                                <IconButton edge="start" aria-label="delete" disabled={loading}
                                                     onClick={() => handleClickMinus(row)}
                                                 >
                                                 <RemoveCircleIcon/>
@@ -271,7 +273,7 @@ function TallyList({list}){
                                                 </Typography>
                                                 
                                                 </Box>
-                                                <IconButton edge="end" aria-label="add"
+                                                <IconButton edge="end" aria-label="add" disabled={loading}
                                                     onClick={() => handleClickAdd(row)}
                                                 >
                                                     <AddCircleIcon color='secondary' />
@@ -314,7 +316,7 @@ function TallyList({list}){
                                     return(
                                         <ListItem key={row.cand_id} secondaryAction={
                                             <>
-                                                <IconButton edge="start" aria-label="delete"
+                                                <IconButton edge="start" aria-label="delete" disabled={loading}
                                                     onClick={() => handleClickMinus(row)}
                                                 >
                                                 <RemoveCircleIcon/>
@@ -327,7 +329,7 @@ function TallyList({list}){
                                                 </Typography>
                                                 
                                                 </Box>
-                                                <IconButton edge="end" aria-label="add"
+                                                <IconButton edge="end" aria-label="add" disabled={loading}
                                                     onClick={() => handleClickAdd(row)}
                                                 >
                                                     <AddCircleIcon color='secondary' />
