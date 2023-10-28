@@ -33,12 +33,12 @@ function TallyPage(){
     const [precinct, setPrecinct] = useState('1');
     const [precinctList, setPrencinctList] = useState([]);
     const [ data, setData ] = useState('');
-   
+    const [loading, setLoading ] = useState(false);
     
     
     useEffect(() => {
         getPrecinctList();
-        getPrecinctCandidate();
+        getPrecinctCandidate(1);
     }, [session]);
     
     const getPrecinctList = async () => {
@@ -49,14 +49,17 @@ function TallyPage(){
 
     }
 
-    const getPrecinctCandidate = async () => {
+    const getPrecinctCandidate = async (value) => {
+        setLoading(true);
         if( session ) {
-            const { data, error } = await ApiGetTally({ token: 'token', precinct});
+            const { data, error } = await ApiGetTally({ token: 'token', precinct: value});
             if( data) setData(data);
         }
+        setLoading(false);
+
     }
 
-    if( !data ) return (<h1>Loading...</h1>);
+    if( loading ) return (<h1>Loading...</h1>);
 
     return (
         <>
@@ -85,7 +88,7 @@ function TallyPage(){
                                 value={precinct}
                                 onChange={(event) => {
                                     setPrecinct(event.target.value);
-                                    getPrecinctCandidate();
+                                    getPrecinctCandidate(event.target.value);
                                 }}
                                 sx={{
                                     width: 150
