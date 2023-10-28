@@ -99,70 +99,13 @@ function HomePage() {
 
             { session && session.user.role !== 'watcher' &&
               <>
-                <Paper elevation={3}
-              sx={{
-                textAlign: "center",
-              }}
-            >
-              <NextLink className='menutiles' href="/voting" passHref>
-                <Box sx={{
-                  mt: 3,
-                  width: 150
-                  
-                }}>
-                  <Typography
-                    variant='h5'
-                  >
-                    Reports
-                  </Typography>
-                </Box>
-                <Box
-                  
-                  component="img"
-                  sx={{
-                    m:1,
-                    width: 150,
-                  }}
-                  alt="Upload preview"
-                  src="/static/images/watcher/tally-reports.png"
-                  />
-              </NextLink>
-              </Paper>
+                
               <Paper elevation={3}
                 sx={{
                   textAlign: "center",
                 }}
               >
-                <NextLink className='menutiles' href="/voting" passHref>
-                  <Box sx={{
-                    mt: 3,
-                    width: 150
-                    
-                  }}>
-                    <Typography
-                      variant='h5'
-                    >
-                      Check sent tally
-                    </Typography>
-                  </Box>
-                  <Box
-                    
-                    component="img"
-                    sx={{
-                      m:1,
-                      width: 130,
-                    }}
-                    alt="Upload preview"
-                    src="/static/images/watcher/tally-sent.png"
-                    />
-                </NextLink>
-              </Paper>
-              <Paper elevation={3}
-                sx={{
-                  textAlign: "center",
-                }}
-              >
-                <NextLink className='menutiles' href="/voting" passHref>
+                <NextLink className='menutiles' href="/checker" passHref>
                   <Box sx={{
                     mt: 3,
                     width: 150

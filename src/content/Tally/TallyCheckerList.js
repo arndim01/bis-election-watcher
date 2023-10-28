@@ -48,7 +48,7 @@ const applyFilters = (list, filter) => {
     return filtered.length > 0? filtered: null;
 }
 
-function TallyList({list, status}){
+function TallyCheckerList({list}){
 
     const [loading, setLoading] = useState(false);
 
@@ -128,29 +128,7 @@ function TallyList({list, status}){
                             {  filterCaptain.map((row)=> {
 
                                 return(
-                                    <ListItem key={row.cand_id} secondaryAction={
-                                        <>
-                                            <IconButton edge="start" aria-label="delete" disabled={loading || status}
-                                                onClick={() => handleClickMinus(row)}
-                                            >
-                                            <RemoveCircleIcon/>
-                                            </IconButton>
-                                            <Box sx={{ display: 'inline-flex'}}>
-                                            <Typography variant='' sx={{
-                                                fontSize: 15
-                                            }} >
-                                            {row.totalcount}
-                                            </Typography>
-                                            
-                                            </Box>
-                                            <IconButton edge="end" aria-label="add" disabled={loading || status}
-                                                onClick={() => handleClickAdd(row)}
-                                            >
-                                                <AddCircleIcon color='secondary' />
-                                            </IconButton>
-                                        </>
-                                        
-                                    }>
+                                    <ListItem key={row.cand_id} >
                                         <ListItemAvatar sx={{
                                                         mr:2
                                                     }}>
@@ -160,6 +138,7 @@ function TallyList({list, status}){
                                                     }
                                                     </ListItemAvatar>
                                         <ListItemText primary={row.fullname} secondary="Captain" />
+                                        <span>{row.totalcount}</span>
                                     </ListItem>
                                 )
                                 
@@ -185,29 +164,7 @@ function TallyList({list, status}){
                                 {  filterCounsilor.map((row)=> {
 
                                     return(
-                                        <ListItem key={row.cand_id} secondaryAction={
-                                            <>
-                                                <IconButton edge="start" aria-label="delete" disabled={loading || status}
-                                                    onClick={() => handleClickMinus(row)}
-                                                >
-                                                <RemoveCircleIcon/>
-                                                </IconButton>
-                                                <Box sx={{ display: 'inline-flex'}}>
-                                                <Typography variant='' sx={{
-                                                    fontSize: 15
-                                                }} >
-                                                {row.totalcount}
-                                                </Typography>
-                                                
-                                                </Box>
-                                                <IconButton edge="end" aria-label="add" disabled={loading || status}
-                                                    onClick={() => handleClickAdd(row)}
-                                                >
-                                                    <AddCircleIcon color='secondary' />
-                                                </IconButton>
-                                            </>
-                                            
-                                        }>
+                                        <ListItem key={row.cand_id} >
                                             <ListItemAvatar sx={{
                                                         mr:2
                                                     }}>
@@ -217,6 +174,7 @@ function TallyList({list, status}){
                                                     }
                                                     </ListItemAvatar>
                                             <ListItemText primary={row.fullname} secondary="Councilor" />
+                                            <span>{row.totalcount}</span>
                                         </ListItem>
                                     )
 
@@ -225,35 +183,14 @@ function TallyList({list, status}){
                                 {  filterIndependent.map((row)=> {
 
                                 return(
-                                    <ListItem key={row.cand_id} secondaryAction={
-                                        <>
-                                            <IconButton edge="start" aria-label="delete" disabled={loading || status}
-                                                onClick={() => handleClickMinus(row)}
-                                            >
-                                            <RemoveCircleIcon/>
-                                            </IconButton>
-                                            <Box sx={{ display: 'inline-flex'}}>
-                                            <Typography variant='' sx={{
-                                                fontSize: 15
-                                            }} >
-                                            {row.totalcount}
-                                            </Typography>
-                                            
-                                            </Box>
-                                            <IconButton edge="end" aria-label="add" disabled={loading || status}
-                                                onClick={() => handleClickAdd(row)}
-                                            >
-                                                <AddCircleIcon color='secondary' />
-                                            </IconButton>
-                                        </>
-                                        
-                                    }>
+                                    <ListItem key={row.cand_id} >
                                         <ListItemAvatar sx={{
                                                     mr:2
                                                 }}>
                                                 <Avatar sx={{ height: 50, width: 50}} src={row.photo_url?row.photo_url:'/static/images/watcher/default.png'}/>
                                                 </ListItemAvatar>
                                         <ListItemText primary={row.fullname} secondary="Councilor" />
+                                        <span>{row.totalcount}</span>
                                     </ListItem>
                                 )
 
@@ -278,29 +215,7 @@ function TallyList({list, status}){
                                 {  filterSkChairman.map((row)=> {
 
                                     return(
-                                        <ListItem key={row.cand_id} secondaryAction={
-                                            <>
-                                                <IconButton edge="start" aria-label="delete" disabled={loading || status}
-                                                    onClick={() => handleClickMinus(row)}
-                                                >
-                                                <RemoveCircleIcon/>
-                                                </IconButton>
-                                                <Box sx={{ display: 'inline-flex'}}>
-                                                <Typography variant='' sx={{
-                                                    fontSize: 15
-                                                }} >
-                                                {row.totalcount}
-                                                </Typography>
-                                                
-                                                </Box>
-                                                <IconButton edge="end" aria-label="add" disabled={loading || status}
-                                                    onClick={() => handleClickAdd(row)}
-                                                >
-                                                    <AddCircleIcon color='secondary' />
-                                                </IconButton>
-                                            </>
-                                            
-                                        }>
+                                        <ListItem key={row.cand_id} >
                                             <ListItemAvatar sx={{
                                                         mr:2
                                                     }}>
@@ -310,6 +225,7 @@ function TallyList({list, status}){
                                                     }
                                                     </ListItemAvatar>
                                             <ListItemText primary={row.fullname} secondary="SK Chairman" />
+                                            <span>{row.totalcount}</span>
                                         </ListItem>
                                     )
 
@@ -334,29 +250,7 @@ function TallyList({list, status}){
                                 {  filterSKCounsilor.map((row)=> {
 
                                     return(
-                                        <ListItem key={row.cand_id} secondaryAction={
-                                            <>
-                                                <IconButton edge="start" aria-label="delete" disabled={loading || status}
-                                                    onClick={() => handleClickMinus(row)}
-                                                >
-                                                <RemoveCircleIcon/>
-                                                </IconButton>
-                                                <Box sx={{ display: 'inline-flex'}}>
-                                                <Typography variant='' sx={{
-                                                    fontSize: 15
-                                                }} >
-                                                {row.totalcount}
-                                                </Typography>
-                                                
-                                                </Box>
-                                                <IconButton edge="end" aria-label="add" disabled={loading || status}
-                                                    onClick={() => handleClickAdd(row)}
-                                                >
-                                                    <AddCircleIcon color='secondary' />
-                                                </IconButton>
-                                            </>
-                                            
-                                        }>
+                                        <ListItem key={row.cand_id} >
                                             <ListItemAvatar sx={{
                                                         mr:2
                                                     }}>
@@ -366,6 +260,7 @@ function TallyList({list, status}){
                                                     }
                                                     </ListItemAvatar>
                                             <ListItemText primary={row.fullname} secondary="SK Councilor" />
+                                            <span>{row.totalcount}</span>
                                         </ListItem>
                                     )
 
@@ -379,4 +274,4 @@ function TallyList({list, status}){
     );
 }
 
-export default TallyList;
+export default TallyCheckerList;
