@@ -19,7 +19,7 @@ export function useTallyVote({ formData }){
     const { data, error } = useSWR({ url: `${publicRuntimeConfig.apiUrl}/tally/generatevotes`, formData: formData },
         fetcherPost,
         {
-            refreshInterval: 1000
+            refreshInterval: 30000
         }
     );
     return {data, error};
