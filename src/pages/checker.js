@@ -5,13 +5,17 @@ import {
     Box,
     Typography,
     TextField,
-    MenuItem
+    MenuItem,
+    Button
 } from '@mui/material';
 import Layout from '@/layouts/Layout';
 import { ApiGetTally, useTally } from '@/helpers/hooks/tally';
 import TallyList from '@/content/Tally/TallyList';
 import { useSession } from 'next-auth/react';
 import { ApiGetPrecinctByParty } from '@/helpers/hooks/precinct';
+import TallyCheckerList from '@/content/Tally/TallyCheckerList';
+import DisableVotesDialog from '@/components/Dialog/DisableVotesDialog';
+import { getToken } from 'next-auth/jwt';
 
 
 const precinctMapper = (data) => {
@@ -28,14 +32,28 @@ const precinctMapper = (data) => {
 };
 
 
-function TallyPage(){
+function CheckerTallyPage(){
     const { data: session} = useSession();
     const [precinct, setPrecinct] = useState('1');
     const [precinctList, setPrencinctList] = useState([]);
     const [ data, setData ] = useState('');
     const [loading, setLoading ] = useState(false);
+
+    const [open, setOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(0);
+    const [mode, setMode] = useState('');
     
-    
+
+    const handleConfirmationOpen = async (value) => {
+        setSelectedItem(precinct);
+        setMode(value);
+        setOpen(true);
+    }
+
+    const handleConfirmationClose = (value) => {
+        setOpen(false);
+    }
+
     useEffect(() => {
         getPrecinctList();
         getPrecinctCandidate(1);
@@ -103,8 +121,6 @@ function TallyPage(){
                             </TextField>
                         </Box>
                         
-
-                        
                     </Box>
                     <Box>
                         <Typography variant="subtitle1" gutterBottom>
@@ -116,21 +132,50 @@ function TallyPage(){
                     </Box>
                     <Box>
                         <Typography variant="subtitle2" gutterBottom>
-                            Vote: {data.disable_count?'Freeze': 'Unfreeze'}
+                            Status: {data.disable_count?'Freeze': 'Unfreeze'}
                         </Typography>
                     </Box>
                     { data.candidates &&
-                        <TallyList list={data.candidates} status={data.disable_count} />
+                        <TallyCheckerList list={data.candidates} />
                     }
-                    
+                    <Box sx={{
+                        display: 'flex',
+                        '& .MuiButton-contained': { m: 2, width: '200px' }
+                    }}>
+                        <Button variant="contained" onClick={() => handleConfirmationOpen("freeze")}  >Freeze</Button>
+                        <Button variant="contained" onClick={() => handleConfirmationOpen("unfreeze")} color='error'>Unfreeze</Button>
+                    </Box>
                 </Container>
             }
+            <DisableVotesDialog 
+                open={open}
+                onClose={handleConfirmationClose}
+                selectedItem={selectedItem}
+                mode={mode}
+            />
         </>
     );
 }
 
-TallyPage.getLayout = (page) => (
+CheckerTallyPage.getLayout = (page) => (
     <Layout>{page}</Layout>
 );
 
-export default TallyPage;
+export default CheckerTallyPage;
+
+export async function getServerSideProps( context ){
+    const secret = process.env.NEXTAUTH_SECRET;
+    const token = await getToken({ req: context.req, secret});
+
+    if( token.user.role == "watcher"){
+        return {
+            redirect:{
+                destination: '/',
+                permanent: false
+            }
+        }
+    }
+
+
+    return { props: {}}
+}

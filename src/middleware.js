@@ -29,6 +29,7 @@ export const config = {
         "/tally",
         "/profile",
         "/account",
+        "/checker",
         "/login",
     ]
 }
