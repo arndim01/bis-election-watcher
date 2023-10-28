@@ -58,30 +58,50 @@ function TallyList({list}){
     const filterSKCounsilor = applyFilters(list, "SK Councilor");
     const filterIndependent = applyFilters(list, "Independent");
 
+    const { data: session } = useSession();
+
     async function postVote(values, types){
         setLoading(true);
-        if( values.totalcount == 0 && types == "minus"  ) return;
-
+        console.log('test');
+        if( values.totalcount == 0 && types == "minus"  ) {
+            setLoading(false);
+            return false;
+        } 
+        if( types =="add"){
+            values.totalcount++;
+        }else{
+            values.totalcount--;
+        }
+        
         const fields = Object.keys(ValidateProps.candidate_count);
         let formData = new FormData();
-        formData.append("created_by", "652698b762258f7fdd19c2ca"); //user_id session
+        
         formData.append("type", types); //user_id session
         fields.forEach(field => {
             if( values[field]){
+                console.log(values[field]);
                 formData.append(field, values[field]);
             }
         });
 
+        if(session){
+            console.log(session.user.uid);
+            formData.append("created_by", session.user.uid); //user_id session
+        }
+
         let formDataObjects = Object.fromEntries(formData.entries());
         const { data, error} = await ApiPostCount({ token: "token", formData: formDataObjects});
+        console.log('test');
         setLoading(false);        
     }
 
     const handleClickAdd = async (values) => {
+        
         await postVote(values, "add");
     };
 
     const handleClickMinus = async (values) => {
+        
         await postVote(values, "minus");
     };
 
