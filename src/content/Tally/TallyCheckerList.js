@@ -138,7 +138,7 @@ function TallyCheckerList({list}){
                                                     }
                                                     </ListItemAvatar>
                                         <ListItemText primary={row.fullname} secondary="Captain" />
-                                        <span>{row.totalcount}</span>
+                                        <span>{row.totaloverride}</span>
                                     </ListItem>
                                 )
                                 
@@ -174,7 +174,7 @@ function TallyCheckerList({list}){
                                                     }
                                                     </ListItemAvatar>
                                             <ListItemText primary={row.fullname} secondary="Councilor" />
-                                            <span>{row.totalcount}</span>
+                                            <span>{row.totaloverride}</span>
                                         </ListItem>
                                     )
 
@@ -190,7 +190,7 @@ function TallyCheckerList({list}){
                                                 <Avatar sx={{ height: 50, width: 50}} src={row.photo_url?row.photo_url:'/static/images/watcher/default.png'}/>
                                                 </ListItemAvatar>
                                         <ListItemText primary={row.fullname} secondary="Councilor" />
-                                        <span>{row.totalcount}</span>
+                                        <span>{row.totaloverride}</span>
                                     </ListItem>
                                 )
 
@@ -225,7 +225,7 @@ function TallyCheckerList({list}){
                                                     }
                                                     </ListItemAvatar>
                                             <ListItemText primary={row.fullname} secondary="SK Chairman" />
-                                            <span>{row.totalcount}</span>
+                                            <span>{row.totaloverride}</span>
                                         </ListItem>
                                     )
 
@@ -260,7 +260,7 @@ function TallyCheckerList({list}){
                                                     }
                                                     </ListItemAvatar>
                                             <ListItemText primary={row.fullname} secondary="SK Councilor" />
-                                            <span>{row.totalcount}</span>
+                                            <span>{row.totaloverride}</span>
                                         </ListItem>
                                     )
 

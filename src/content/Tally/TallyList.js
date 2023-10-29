@@ -11,7 +11,8 @@ import {
     Box,
     useTheme,
     styled,
-    Typography
+    Typography,
+    TextField
 } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -34,9 +35,10 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ListSubheader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
-import { ApiPostCount } from '@/helpers/hooks/tally';
+import { ApiPostCount, ApiPostCountTally } from '@/helpers/hooks/tally';
 import { ValidateProps } from '@/helpers/api/constants';
-
+import SendIcon from '@mui/icons-material/Send';
+import VoteField from '@/components/Input/VoteField';
 
 const applyFilters = (list, filter) => {
 
@@ -105,6 +107,28 @@ function TallyList({list, status}){
         await postVote(values, "minus");
     };
 
+    const uploadCountValue = async (object, values) => {
+        
+        console.log(object);
+        let formData = new FormData();
+        const fields = Object.keys(ValidateProps.candidate_count);
+        formData.append("tally_number", values);
+        fields.forEach(field => {
+            if( object[field]){
+                console.log(object[field]);
+                formData.append(field, object[field]);
+            }
+        });
+
+        if(session){
+            console.log(session.user.uid);
+            formData.append("user_id", session.user.uid); //user_id session
+        }
+        let formDataObjects = Object.fromEntries(formData.entries());
+        const {data, error} = await ApiPostCountTally({ token: "token", formData: formDataObjects});
+        console.log('test');
+    }
+
     return(
         <>
             <Box sx={{
@@ -121,45 +145,53 @@ function TallyList({list, status}){
                                 width: '100%',
                                 maxWidth: 560,
                                 bgcolor: 'background.paper',
-                                '& .MuiListItemText-primary': { width: '200px' }
+                                '& .MuiListItemText-primary': { width: '150px' },
+                                '& .MuiTextField-root': { m: 1, width: '80px' },
                             }}
                             >
 
                             {  filterCaptain.map((row)=> {
 
                                 return(
-                                    <ListItem key={row.cand_id} secondaryAction={
-                                        <>
-                                            <IconButton edge="start" aria-label="delete" disabled={loading || status}
-                                                onClick={() => handleClickMinus(row)}
+                                    <ListItem key={row.cand_id}>
+                                        <Box
+                                            sx={{
+                                                display:'flex',
+                                                flexDirection: 'column'
+                                            }}
+                                        >
+                                            <Box
+                                                sx={{
+                                                    display:'flex',
+                                                    flexDirection: 'row'
+                                                }}
                                             >
-                                            <RemoveCircleIcon/>
-                                            </IconButton>
-                                            <Box sx={{ display: 'inline-flex'}}>
-                                            <Typography variant='' sx={{
-                                                fontSize: 15
-                                            }} >
-                                            {row.totalcount}
-                                            </Typography>
-                                            
+
+                                                <ListItemAvatar sx={{
+                                                    mr:2
+                                                }}>
+                                                {
+                                                    row.photo_url &&
+                                                    <Avatar sx={{ height: 50, width: 50}} src={row.photo_url}/>
+                                                }
+                                                </ListItemAvatar>
+                                                <ListItemText primary={row.fullname} secondary="Captain" />
                                             </Box>
-                                            <IconButton edge="end" aria-label="add" disabled={loading || status}
-                                                onClick={() => handleClickAdd(row)}
+                                            <Box
+                                                sx={{
+                                                    display:'flex',
+                                                    flexDirection: 'row'
+                                                }}
                                             >
-                                                <AddCircleIcon color='secondary' />
-                                            </IconButton>
-                                        </>
-                                        
-                                    }>
-                                        <ListItemAvatar sx={{
-                                                        mr:2
-                                                    }}>
-                                                    {
-                                                        row.photo_url &&
-                                                        <Avatar sx={{ height: 50, width: 50}} src={row.photo_url}/>
-                                                    }
-                                                    </ListItemAvatar>
-                                        <ListItemText primary={row.fullname} secondary="Captain" />
+                                                <VoteField 
+                                                    value={row.totaloverride}
+                                                    handleUploadValue={uploadCountValue}
+                                                    disable={loading || status}
+                                                    object={row}
+                                                />
+                                            </Box>
+                                        </Box>
+
                                     </ListItem>
                                 )
                                 
@@ -185,30 +217,21 @@ function TallyList({list, status}){
                                 {  filterCounsilor.map((row)=> {
 
                                     return(
-                                        <ListItem key={row.cand_id} secondaryAction={
-                                            <>
-                                                <IconButton edge="start" aria-label="delete" disabled={loading || status}
-                                                    onClick={() => handleClickMinus(row)}
+                                        <ListItem key={row.cand_id}>
+                                            <Box
+                                                sx={{
+                                                    display:'flex',
+                                                    flexDirection: 'column'
+                                                }}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        display:'flex',
+                                                        flexDirection: 'row'
+                                                    }}
                                                 >
-                                                <RemoveCircleIcon/>
-                                                </IconButton>
-                                                <Box sx={{ display: 'inline-flex'}}>
-                                                <Typography variant='' sx={{
-                                                    fontSize: 15
-                                                }} >
-                                                {row.totalcount}
-                                                </Typography>
-                                                
-                                                </Box>
-                                                <IconButton edge="end" aria-label="add" disabled={loading || status}
-                                                    onClick={() => handleClickAdd(row)}
-                                                >
-                                                    <AddCircleIcon color='secondary' />
-                                                </IconButton>
-                                            </>
-                                            
-                                        }>
-                                            <ListItemAvatar sx={{
+
+                                                    <ListItemAvatar sx={{
                                                         mr:2
                                                     }}>
                                                     {
@@ -216,7 +239,22 @@ function TallyList({list, status}){
                                                         <Avatar sx={{ height: 50, width: 50}} src={row.photo_url}/>
                                                     }
                                                     </ListItemAvatar>
-                                            <ListItemText primary={row.fullname} secondary="Councilor" />
+                                                    <ListItemText primary={row.fullname} secondary="Councilor" />
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        display:'flex',
+                                                        flexDirection: 'row'
+                                                    }}
+                                                >
+                                                    <VoteField 
+                                                        value={row.totaloverride}
+                                                        handleUploadValue={uploadCountValue}
+                                                        disable={loading || status}
+                                                        object={row}
+                                                    />
+                                                </Box>
+                                            </Box>
                                         </ListItem>
                                     )
 
@@ -225,35 +263,44 @@ function TallyList({list, status}){
                                 {  filterIndependent.map((row)=> {
 
                                 return(
-                                    <ListItem key={row.cand_id} secondaryAction={
-                                        <>
-                                            <IconButton edge="start" aria-label="delete" disabled={loading || status}
-                                                onClick={() => handleClickMinus(row)}
+                                    <ListItem key={row.cand_id} >
+                                        <Box
+                                                sx={{
+                                                    display:'flex',
+                                                    flexDirection: 'column'
+                                                }}
                                             >
-                                            <RemoveCircleIcon/>
-                                            </IconButton>
-                                            <Box sx={{ display: 'inline-flex'}}>
-                                            <Typography variant='' sx={{
-                                                fontSize: 15
-                                            }} >
-                                            {row.totalcount}
-                                            </Typography>
-                                            
+                                                <Box
+                                                    sx={{
+                                                        display:'flex',
+                                                        flexDirection: 'row'
+                                                    }}
+                                                >
+
+                                                    <ListItemAvatar sx={{
+                                                        mr:2
+                                                    }}>
+                                                    {
+                                                        row.photo_url &&
+                                                        <Avatar sx={{ height: 50, width: 50}} src={row.photo_url}/>
+                                                    }
+                                                    </ListItemAvatar>
+                                                    <ListItemText primary={row.fullname} secondary="Councilor" />
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        display:'flex',
+                                                        flexDirection: 'row'
+                                                    }}
+                                                >
+                                                    <VoteField 
+                                                        value={row.totaloverride}
+                                                        handleUploadValue={uploadCountValue}
+                                                        disable={loading || status}
+                                                        object={row}
+                                                    />
+                                                </Box>
                                             </Box>
-                                            <IconButton edge="end" aria-label="add" disabled={loading || status}
-                                                onClick={() => handleClickAdd(row)}
-                                            >
-                                                <AddCircleIcon color='secondary' />
-                                            </IconButton>
-                                        </>
-                                        
-                                    }>
-                                        <ListItemAvatar sx={{
-                                                    mr:2
-                                                }}>
-                                                <Avatar sx={{ height: 50, width: 50}} src={row.photo_url?row.photo_url:'/static/images/watcher/default.png'}/>
-                                                </ListItemAvatar>
-                                        <ListItemText primary={row.fullname} secondary="Councilor" />
                                     </ListItem>
                                 )
 
@@ -278,30 +325,21 @@ function TallyList({list, status}){
                                 {  filterSkChairman.map((row)=> {
 
                                     return(
-                                        <ListItem key={row.cand_id} secondaryAction={
-                                            <>
-                                                <IconButton edge="start" aria-label="delete" disabled={loading || status}
-                                                    onClick={() => handleClickMinus(row)}
+                                        <ListItem key={row.cand_id}>
+                                            <Box
+                                                sx={{
+                                                    display:'flex',
+                                                    flexDirection: 'column'
+                                                }}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        display:'flex',
+                                                        flexDirection: 'row'
+                                                    }}
                                                 >
-                                                <RemoveCircleIcon/>
-                                                </IconButton>
-                                                <Box sx={{ display: 'inline-flex'}}>
-                                                <Typography variant='' sx={{
-                                                    fontSize: 15
-                                                }} >
-                                                {row.totalcount}
-                                                </Typography>
-                                                
-                                                </Box>
-                                                <IconButton edge="end" aria-label="add" disabled={loading || status}
-                                                    onClick={() => handleClickAdd(row)}
-                                                >
-                                                    <AddCircleIcon color='secondary' />
-                                                </IconButton>
-                                            </>
-                                            
-                                        }>
-                                            <ListItemAvatar sx={{
+
+                                                    <ListItemAvatar sx={{
                                                         mr:2
                                                     }}>
                                                     {
@@ -309,7 +347,22 @@ function TallyList({list, status}){
                                                         <Avatar sx={{ height: 50, width: 50}} src={row.photo_url}/>
                                                     }
                                                     </ListItemAvatar>
-                                            <ListItemText primary={row.fullname} secondary="SK Chairman" />
+                                                    <ListItemText primary={row.fullname} secondary="SK Chairman" />
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        display:'flex',
+                                                        flexDirection: 'row'
+                                                    }}
+                                                >
+                                                    <VoteField 
+                                                        value={row.totaloverride}
+                                                        handleUploadValue={uploadCountValue}
+                                                        disable={loading || status}
+                                                        object={row}
+                                                    />
+                                                </Box>
+                                            </Box>
                                         </ListItem>
                                     )
 
@@ -334,30 +387,21 @@ function TallyList({list, status}){
                                 {  filterSKCounsilor.map((row)=> {
 
                                     return(
-                                        <ListItem key={row.cand_id} secondaryAction={
-                                            <>
-                                                <IconButton edge="start" aria-label="delete" disabled={loading || status}
-                                                    onClick={() => handleClickMinus(row)}
+                                        <ListItem key={row.cand_id}>
+                                            <Box
+                                                sx={{
+                                                    display:'flex',
+                                                    flexDirection: 'column'
+                                                }}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        display:'flex',
+                                                        flexDirection: 'row'
+                                                    }}
                                                 >
-                                                <RemoveCircleIcon/>
-                                                </IconButton>
-                                                <Box sx={{ display: 'inline-flex'}}>
-                                                <Typography variant='' sx={{
-                                                    fontSize: 15
-                                                }} >
-                                                {row.totalcount}
-                                                </Typography>
-                                                
-                                                </Box>
-                                                <IconButton edge="end" aria-label="add" disabled={loading || status}
-                                                    onClick={() => handleClickAdd(row)}
-                                                >
-                                                    <AddCircleIcon color='secondary' />
-                                                </IconButton>
-                                            </>
-                                            
-                                        }>
-                                            <ListItemAvatar sx={{
+
+                                                    <ListItemAvatar sx={{
                                                         mr:2
                                                     }}>
                                                     {
@@ -365,7 +409,22 @@ function TallyList({list, status}){
                                                         <Avatar sx={{ height: 50, width: 50}} src={row.photo_url}/>
                                                     }
                                                     </ListItemAvatar>
-                                            <ListItemText primary={row.fullname} secondary="SK Councilor" />
+                                                    <ListItemText primary={row.fullname} secondary="SK Councilor" />
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        display:'flex',
+                                                        flexDirection: 'row'
+                                                    }}
+                                                >
+                                                    <VoteField 
+                                                        value={row.totaloverride}
+                                                        handleUploadValue={uploadCountValue}
+                                                        disable={loading || status}
+                                                        object={row}
+                                                    />
+                                                </Box>
+                                            </Box>
                                         </ListItem>
                                     )
 
