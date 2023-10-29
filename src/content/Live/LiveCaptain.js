@@ -35,7 +35,7 @@ function LiveCaptain({list, title}){
                             }}>
                                 <Avatar sx={{ height: 350, width: 350}} src={row.photo_url} ></Avatar>
                                 <Typography variant="h6"> {row.fullname }</Typography>
-                                <Typography variant="h3"> {row.totalcount }</Typography>
+                                <Typography variant="h3"> {row.totaloverride }</Typography>
                             </Box>
                         )
                     })

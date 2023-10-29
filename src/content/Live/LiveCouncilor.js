@@ -36,7 +36,7 @@ function LiveCouncilor({list, title}){
                             }}>
                                 <Avatar sx={{ height: 100, width: 100}} src={row.photo_url} ></Avatar>
                                 <Typography variant="h6"> {row.fullname }</Typography>
-                                <Typography variant="h6"> {row.totalcount }</Typography>
+                                <Typography variant="h6"> {row.totaloverride }</Typography>
                             </Box>
                         )
                     })

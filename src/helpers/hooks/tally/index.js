@@ -34,3 +34,8 @@ export async function ApiPostCount({ token, formData }){
     const { data, error } = await fetchWrapper.post(token, `${publicRuntimeConfig.apiUrl}/count/candidate`, formData);
     return {data, error};
 }
+
+export async function ApiPostCountTally({ token, formData }){
+    const { data, error } = await fetchWrapper.post(token, `${publicRuntimeConfig.apiUrl}/count/candidate_override`, formData);
+    return {data, error};
+}

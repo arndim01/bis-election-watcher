@@ -4,8 +4,7 @@ export const ValidateProps = {
         brgy_id: { type: 'string' },
         part_id: { type: 'string' },
         prec_id: { type: 'string' },
-        cand_id: { type: 'string' },
-        type: { type: 'string' },
+        cand_id: { type: 'string' }
     },
     profile: {
         first_name: { type: 'string'},
