@@ -24,7 +24,7 @@ function VoteField({ value, object, handleUploadValue, disable }){
             >
                 <TextField
                     label="Count"
-                    type="text"
+                    type="number"
                     value={vote}
                     onChange={(e)=> handleOnChangeVote(e)}
                 />
