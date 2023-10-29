@@ -4,14 +4,29 @@ import { useEffect, useState } from "react";
 
 function VoteField({ value, object, handleUploadValue, disable }){
     const [vote, setVote] = useState(value);
+    const [error, setError] = useState('');
 
     const handleOnChangeVote = (e) =>{
         setVote(e.target.value);
     };
 
     const updateVoteCount = () => {
-        handleUploadValue(object, vote);
+        setError('');
+
+        if( isNumber(vote) ){
+            handleUploadValue(object, vote);
+        }else{
+            setError('Count must be a number');
+        }
     };
+
+    function isNumber(str) {
+        if (str.trim() === '') {
+          return false;
+        }
+      
+        return !isNaN(str);
+    }
 
     return(
         <>
@@ -19,7 +34,7 @@ function VoteField({ value, object, handleUploadValue, disable }){
                 sx={{
                     display:'flex',
                     flexDirection: 'row',
-                    '& .MuiTextField-root': { m: 1, width: '80px' }
+                    '& .MuiTextField-root': { m: 1, width: '150px' }
                 }}
             >
                 <TextField
@@ -27,6 +42,8 @@ function VoteField({ value, object, handleUploadValue, disable }){
                     type="number"
                     value={vote}
                     onChange={(e)=> handleOnChangeVote(e)}
+                    error={error != ''}
+                    helperText={error}
                 />
                 <IconButton onClick={updateVoteCount} disabled={disable} >
                     <SendIcon color='primary' />
