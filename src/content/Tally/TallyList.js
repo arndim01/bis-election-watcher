@@ -64,7 +64,6 @@ function TallyList({list, status}){
 
     async function postVote(values, types){
         setLoading(true);
-        console.log('test');
         if( values.totalcount == 0 && types == "minus"  ) {
             setLoading(false);
             return false;
@@ -81,19 +80,16 @@ function TallyList({list, status}){
         formData.append("type", types); //user_id session
         fields.forEach(field => {
             if( values[field]){
-                console.log(values[field]);
                 formData.append(field, values[field]);
             }
         });
 
         if(session){
-            console.log(session.user.uid);
             formData.append("created_by", session.user.uid); //user_id session
         }
 
         let formDataObjects = Object.fromEntries(formData.entries());
         const { data, error} = await ApiPostCount({ token: "token", formData: formDataObjects});
-        console.log('test');
         setLoading(false);        
     }
 
@@ -109,24 +105,20 @@ function TallyList({list, status}){
 
     const uploadCountValue = async (object, values) => {
         
-        console.log(object);
         let formData = new FormData();
         const fields = Object.keys(ValidateProps.candidate_count);
         formData.append("tally_number", values);
         fields.forEach(field => {
             if( object[field]){
-                console.log(object[field]);
                 formData.append(field, object[field]);
             }
         });
 
         if(session){
-            console.log(session.user.uid);
             formData.append("user_id", session.user.uid); //user_id session
         }
         let formDataObjects = Object.fromEntries(formData.entries());
         const {data, error} = await ApiPostCountTally({ token: "token", formData: formDataObjects});
-        console.log('test');
     }
 
     return(

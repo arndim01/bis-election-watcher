@@ -62,7 +62,6 @@ function TallyCheckerList({list}){
 
     async function postVote(values, types){
         setLoading(true);
-        console.log('test');
         if( values.totalcount == 0 && types == "minus"  ) {
             setLoading(false);
             return false;
@@ -79,13 +78,11 @@ function TallyCheckerList({list}){
         formData.append("type", types); //user_id session
         fields.forEach(field => {
             if( values[field]){
-                console.log(values[field]);
                 formData.append(field, values[field]);
             }
         });
 
         if(session){
-            console.log(session.user.uid);
             formData.append("created_by", session.user.uid); //user_id session
         }
 
