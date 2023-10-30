@@ -104,7 +104,7 @@ function TallyList({list, status}){
     };
 
     const uploadCountValue = async (object, values) => {
-        
+        setLoading(true);
         let formData = new FormData();
         const fields = Object.keys(ValidateProps.candidate_count);
         formData.append("tally_number", values);
@@ -119,6 +119,7 @@ function TallyList({list, status}){
         }
         let formDataObjects = Object.fromEntries(formData.entries());
         const {data, error} = await ApiPostCountTally({ token: "token", formData: formDataObjects});
+        setLoading(false);
     }
 
     return(

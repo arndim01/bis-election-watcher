@@ -21,6 +21,9 @@ function VoteField({ value, object, handleUploadValue, disable }){
     };
 
     function isNumber(str) {
+
+        if( str == '' ) return false;
+
         if (str.trim() === '') {
           return false;
         }
